@@ -1,8 +1,6 @@
 
 # Pipeline for the compilations of MassBank records from raw data
 
-TODO intro
-
 ## Information to be supplied
 
 ### A meta data spreadsheet containing information for the measured substances
@@ -43,6 +41,16 @@ Sheet for properties describing the chromatography instrumentation. Composed of 
 
 Sheet for properties describing the chromatography instrumentation. Composed of two columns, namely `Property` with the property names and `Value` with the value corresponding to the property. It is recommended to use MassBank tags as property names. Please find the recommended MassBank record tags [here](https://github.com/MassBank/MassBank-web/blob/master/Documentation/MassBankRecordFormat.md#243-acmass_spectrometry-ms_type).
 
+## Installation
+
+This pipeline is designed for a Linux machine.
+In command line clone the slightly adapted code of the RMassBank package.
+`git clone -b branch_treutler https://github.com/MassBank/RMassBank.git`
+Install the package in RStudio.
+`install.packages("[path to RMassBank source]", repos = NULL, type="source")`
+Install openbabel.
+`sudo apt-get install openbabel`
+
 ## Creating a project
 
 A project is a self-contained data set for the generation of a set of MassBank records from raw data. Projects are currently stored at `/IPB/Projects/2017_005_MS-databases/mFam contributions/`. The project folder name is arbitrary and usually comprises the name and affiliation of a data contributor. The project folder structure includes the following folders.
@@ -68,13 +76,13 @@ The meta data spreadsheet is filled independently by the experimentalist startin
 
 ### Prerequisites
 
+- Follow the installation guidelines above
 - meta data spreadsheet under path `meta data` in the project folder
 - raw msp files under path `raw data/exported as raw msp` in the project folder
-- Linux PC with openbabel installed (`sudo apt-get install openbabel`)
 
 ### Run
 
-The conversion of raw data and meta data to MassBank records is done by RMassBank with some pre- and post-processing. To run RMassBank adapt the following code.
+The conversion of raw data and meta data to MassBank records is done by RMassBank with some pre- and post-processing. To run RMassBank adapt and run the following code in the R console.
 ```
 source("/mnt/ifs/data/IPB/Projects/2017_005_MS-databases/mFam contributions/mFam Aggregation/CommunityToMassBank.R")
 
