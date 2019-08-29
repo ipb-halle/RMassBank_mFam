@@ -41,7 +41,7 @@ Sheet for properties describing the chromatography instrumentation. Composed of 
 
 Sheet for properties describing the chromatography instrumentation. Composed of two columns, namely `Property` with the property names and `Value` with the value corresponding to the property. It is recommended to use MassBank tags as property names. Please find the recommended MassBank record tags [here](https://github.com/MassBank/MassBank-web/blob/master/Documentation/MassBankRecordFormat.md#243-acmass_spectrometry-ms_type).
 
-## Installation
+## Install
 
 This pipeline is designed for a Linux machine.
 In command line clone the slightly adapted code of the RMassBank package.
