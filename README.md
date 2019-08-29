@@ -84,7 +84,7 @@ The meta data spreadsheet is filled independently by the experimentalist startin
 
 The conversion of raw data and meta data to MassBank records is done by RMassBank with some pre- and post-processing. To run RMassBank adapt and run the following code in the R console.
 ```
-source("/mnt/ifs/data/IPB/Projects/2017_005_MS-databases/mFam contributions/mFam Aggregation/CommunityToMassBank.R")
+source("/mnt/ifs/data/IPB/Projects/2017_005_MS-databases/mFam_code/RMassBank_mFam/CommunityToMassBank.R")
 
 parentFolder <- "/mnt/data/IPB/Projects/2017_005_MS-databases/mFam contributions/"
 
@@ -102,7 +102,7 @@ The console will print the progress of the RMassBank workflow. The MassBank reco
 
 There are some utility function for the management of projects as follows.
 ```
-source("/mnt/ifs/data/IPB/Projects/2017_005_MS-databases/mFam contributions/mFam Aggregation/CommunityToMassBank.R")
+source("/mnt/ifs/data/IPB/Projects/2017_005_MS-databases/mFam_code/RMassBank_mFam/CommunityToMassBank.R")
 
 parentFolder <- "/mnt/data/IPB/Projects/2017_005_MS-databases/mFam contributions/"
 aggregationFolder <- paste(parentFolder, "mFam Aggregation", sep = "")
