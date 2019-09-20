@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<tool id="msp2massbank" name="msp2massbank" version="0.1">
+  <requirements>
+    <container type="docker">korseby/msp2massbank</container>
+  </requirements>
+  <description>Convert MSP library to MassBank records</description>
+  <stdio>
+    <regex match="" source="stderr" level="warning" description="R messages" />
+    <exit_code range="1:" level="fatal" description="Tool error" />
+  </stdio>
+  <command><![CDATA[
+msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name"; 
+ls -R /tmp/msp2massbank;
+msp2massbank.r "$accession_prefix" "$excel_file.name";
+  ]]>
+  </command>
+  <inputs>
+    <param name="msp_file" type="data" format="txt" optional="False" label="MSP library" help="MSP library" />
+    <param name="excel_file" type="data" format="xlsx" optional="False" label="Excel meta data" help="XSLX meta data" />
+    <param name="accession_prefix" type="text" value="IH" optional="False" label="Accession prefix" help="MassBank accession prefix" />
+  </inputs>
+  <outputs>
+    <data name="massbank_file" type="data" format="zip" label="MassBank records" />
+  </outputs>
+  <help>
+.. class:: infomark
+
+**Authors**
+
+| **Kristian Peters (kpeters@ipb-halle.de)** wrote and maintains this module.
+
+---------------------------------------------------
+
+========================
+MSP to MetFrag parameter
+========================
+
+-----------
+Description
+-----------
+
+| Read spectra from MSP file and create MetFrag parameter file.
+
+-----------
+Input files
+-----------
+
++------------------------------+------------+
+| File                         |   Format   |
++==============================+============+
+| 1)  MSP file(s)              |   MSP      |
++------------------------------+------------+
+
+----------
+Parameters
+----------
+	  
+Intensity threshold of largest peak
+        | The threshold the largest peak must have to be recognized.
+        |
+
+Minimum proportion of peaks
+        | All peaks less than a percentage value with regard to the largest peak are rejected.
+        |
+
+Neutral losses of precursor to fragments
+        | Add neutral losses of precursor to fragments of the spectrum.
+        |
+
+Neutral losses of fragments to fragments
+        | Add neutral losses among fragments to fragments of the spectrum.
+        |
+
+Polarity
+        | The polarity used for the mode of acquisition.
+        |
+
+Precursor ion type
+        | The ion type of the precursor.
+        |
+
+Database Search Relative Mass Deviation
+        | A value in ppm that defines the deviation of theoretical masses in the database vs. the measured masses.
+        |
+
+Fragment Peak Match Absolute Mass Deviation
+        | Absolute mass deviation in Dalton of theoretical fragment peaks vs. measured fragment peaks.
+        |
+
+Fragment Peak Match Relative Mass Deviation
+        | Relative mass deviation in ppm of theoretical fragment peaks vs. measured fragment peaks.
+        |
+
+Suspect list
+        | Choose whether to include a file containing a list of suspects.
+        |
+
+MetFrag Score Types
+        | The type of scores MetFrac is using for the calculations. Please do not change the values unless you know what you are doing!
+        |
+
+MetFrag Score Weights
+        | The weights of the different score types, separated with a comma and without whitespaces. 1.0 means 100%.
+        |
+
+MetFrag Database Type
+        | Database to choose from.
+        |
+
+------------
+Output files
+------------
+
++------------------------------------------+--------+
+| Files                                    | Format |
++==========================================+========+
+| 1)  (Multiple) MetFrag parameter list(s) |  TXT   |
++------------------------------------------+--------+
+
+---------------------------------------------------
+
+-------
+Changes
+-------
+
+Version: 1.0
+
+  </help>
+</tool>
+
