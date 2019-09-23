@@ -18,11 +18,11 @@ RUN dpkg-reconfigure locales
 RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install apt-transport-https make gcc gfortran g++ libblas-dev liblapack-dev libxml++2.6-dev libexpat1-dev libxml2-dev libnetcdf-dev libssl-dev r-base r-base-dev maven texlive-latex-base texlive-latex-recommended texlive-fonts-recommended git openjdk-8-jdk-headless openjdk-8-jre-headless pkg-config parallel wget curl git unzip zip python3 openbabel
 
 # Install R packages
-RUN R -e 'install.packages(c("devtools","readxl","webchem"))'
+RUN R -e 'install.packages(c("devtools","readxl","webchem","jsonlite","rcdk","circlize","plotrix","squash"))'
 
 # Install  Bioconductor 
 RUN R CMD javareconf
-RUN R -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install(c("multtest","MSnbase","mzR","MassSpecWavelet","S4Vectors","BiocStyle","faahKO","msdata","xcms","CAMERA","RMassBank"), ask=FALSE)'
+RUN R -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install(c("multtest","MSnbase","mzR","MassSpecWavelet","S4Vectors","BiocStyle","faahKO","msdata","xcms","CAMERA"), ask=FALSE)'
 RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank", ref="treutler-merge")'
 RUN R -e 'library(devtools); install_github(repo = "CDK-R/rinchi@master")'
 

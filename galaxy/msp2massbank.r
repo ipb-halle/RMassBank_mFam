@@ -10,8 +10,8 @@ library(rcdk)
 library(rinchi)
 library(RMassBank)
 #library("RMassBank", lib.loc="/home/kpeters/R/x86_64-pc-linux-gnu-library/3.5/")
-#source("/tmp/RMassBank/R/leCsvAccess.R")
 #source("/tmp/RMassBank/R/formulaCalculator.R")
+#source("/tmp/RMassBank/R/leCsvAccess.R")
 source("/usr/src/RMassBank/R/formulaCalculator.R")
 source("/usr/src/RMassBank/R/leCsvAccess.R")
 library(readxl)
@@ -21,7 +21,7 @@ library(plotrix)
 library(squash)
 
 # Options
-options(stringAsfactors = FALSE, useFancyQuotes = FALSE)
+#options(stringAsfactors = FALSE, useFancyQuotes = FALSE)
 
 # Taking the command line arguments
 args <- commandArgs(trailingOnly = TRUE)
@@ -3900,6 +3900,11 @@ getInfoFixKey <- function(Directory, csvname, babel_dir, verbose.output=TRUE){
 
 # Run
 preprocessContributorToMassBankWorkflow(folder, accessionPrefix, xlsxFile, ms_type, takeRecordedNames)
+
+# Just another namespace bug
+#source("/tmp/RMassBank/R/leCsvAccess.R")
+source("/usr/src/RMassBank/R/leCsvAccess.R")
+
 runContributorToMassBankWorkflow(folder, applyIntensityThreshold, reprocess = FALSE)
 
 # Utility
