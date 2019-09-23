@@ -4,6 +4,9 @@
 # Load required libraries
 library(stringr)
 library(stringi)
+library(tools)
+library(jsonlite)
+library(rcdk)
 library(rinchi)
 library(RMassBank)
 #library("RMassBank", lib.loc="/home/kpeters/R/x86_64-pc-linux-gnu-library/3.5/")
@@ -13,6 +16,9 @@ source("/usr/src/RMassBank/R/formulaCalculator.R")
 source("/usr/src/RMassBank/R/leCsvAccess.R")
 library(readxl)
 library(webchem)
+library(circlize)
+library(plotrix)
+library(squash)
 
 # Options
 options(stringAsfactors = FALSE, useFancyQuotes = FALSE)
@@ -36,7 +42,9 @@ aggregationFolder <- paste(parentFolder, "mFam Aggregation", sep = "")
 #folder <- "/home/kpeters/msp2massbank"
 folder <- parentFolder
 ms_type <- "MS2"
-accessionPrefix <- as.character(args[1]) #"IH" # "[TODO]" #as.character(args[1])
+#accessionPrefix <- "IH"
+accessionPrefix <- as.character(args[1]) #"IH" # "[TODO]"
+#xlsxFile <- "MFAM_Micha_4tomatoes_edHT_ESIneg.xlsx"
 xlsxFile <- as.character(args[2])
 takeRecordedNames <- TRUE
 applyIntensityThreshold <- FALSE
@@ -63,7 +71,7 @@ knownAccessionPrefixes <- c(
 
 knownAdducts <- getAdductInformation("")$adductString# c("[M+H]+", "[M+Na]+", "[M+K]+", "[M]+", "[M+NH4]+", "[M+ACN+H]+", "[M+ACN+Na]+", "[M+2Na-H]+", "[2M+H]+", "[2M+K]+", "[2M+Na]+", "[2M+NH4]+", "[2M+ACN+H]+", "[M+ACN+2H]2+", "[M+2H]2+", "[M-H]-", "[M]-", "[M+FA]-") ## --> adductToIonMode
 adductOverview <- function(){
-  library("RMassBank")
+  #library("RMassBank")
   adductDf <- getAdductInformation("C100")
   massAdditions <- sapply(X = adductDf$addition, FUN = RMassBank:::getMonoisotopicMass)
   adductDf$massAddition <- massAdditions
@@ -149,7 +157,7 @@ preprocessData_compoundInformation <- function(metaDataCompoundsDf){
   inchiToPubchemId_pubchem2 <- vector(mode = "character", length = 0)
   inchiToPubchemId_pubchem3 <- vector(mode = "character", length = 0)
   
-  library("jsonlite")
+  #library("jsonlite")
   cat(".")
   if(length(inchiKeys) > 0){
     #inchiToPubchemId_webchem2 <- sapply(X = inchiKeys, FUN = function(inchiKey){webchem::cs_inchikey_csid(inchikey = inchiKey, verbose = FALSE)})
@@ -300,7 +308,7 @@ preprocessData <- function(folder, fileMetaData, fileMetaDataCompoundInformation
   folderRawData    <- paste(folder, "raw data", sep = "/")
   
   #install.packages('readxl')
-  library('readxl')
+  #library('readxl')
   
   presentSheets <- readxl::excel_sheets(path = fileMetaData)
   conventionalSheets <- c("Compounds", "Chromatography", "Mass_Spectrometry")
@@ -610,7 +618,7 @@ preprocessData <- function(folder, fileMetaData, fileMetaDataCompoundInformation
   
   ######################################################################################################
   ## TODO validate remaining fields
-  library("stringr")
+  #library("stringr")
   numberOfOpeningBrackets <- str_count(string = metaDataCompoundsDf$SMILES, pattern = "\\(")
   numberOfClosingBrackets <- str_count(string = metaDataCompoundsDf$SMILES, pattern = "\\)")
   if(any(numberOfOpeningBrackets != numberOfClosingBrackets, na.rm = TRUE)) stop(paste("SMILES of compounds", paste(metaDataCompoundsDf$ID[numberOfOpeningBrackets != numberOfClosingBrackets], collapse = "; "), "are invalid:", paste(metaDataCompoundsDf$SMILES[numberOfOpeningBrackets != numberOfClosingBrackets], collapse = "; ")))
@@ -664,7 +672,7 @@ preprocessData <- function(folder, fileMetaData, fileMetaDataCompoundInformation
   metaDataCompoundsDf$"Synonyms" <- gsub(x = metaDataCompoundsDf$"Synonyms", pattern = "\\\\", replacement = "")
   
   #metaDataCompoundsDf$"Synonyms"[grepl(x = metaDataCompoundsDf$"Synonyms", pattern = "<U\\+[A-Za-z0-9]{4,4}>")]
-  library("stringr")
+  #library("stringr")
   knownUnicodeSymbols <- c(NA, "<U+03B2>", "<U+03B1>", "<U+2192>")
   presentUnicodeSymbols <- unique(unlist(str_extract_all(string = metaDataCompoundsDf$"Synonyms", pattern = "<U\\+[A-Za-z0-9]{4,4}>")))
   if(!all(presentUnicodeSymbols %in% knownUnicodeSymbols)) stop(paste("Unrecognized unicode characters", presentUnicodeSymbols[presentUnicodeSymbols %in% knownUnicodeSymbols]))
@@ -856,9 +864,9 @@ preprocessInfoList <- function(fileCompoundListFileList, fileInfoList, takeRecor
   infoListDf$"CH$LINK.CHEMSPIDER" <- rep(x = "TO_DO", times = nrow(infoListDf))
   
   cat("\nProcessing InfoList cpd information using PubChem CID or InChI...")
-  library("jsonlite")
+  #library("jsonlite")
   #library("Rdisop")
-  library("rcdk")
+  #library("rcdk")
   for(rowIdx in seq_len(nrow(compoundListFileListDf))){
     #for(rowIdx in 957:nrow(compoundListFileListDf)){
     pubchemCidThere <- !is.na(compoundListFileListDf$"PubChem CID"[[rowIdx]])
@@ -1849,7 +1857,7 @@ aggregateMassBankRecords <- function(folder_parts, folderMassBank){
   cat(paste("\nAggregate MassBank records from", length(folder_parts), "folders"))
   
   ## collect
-  library("tools")
+  #library("tools")
   ## partIdx <- 1
   filePaths <- NULL
   for(partIdx in seq_along(folder_parts)){
@@ -2092,7 +2100,7 @@ runContributorToMassBankWorkflow <- function(folder, applyIntensityThreshold = F
   
   #########################################################################################################
   ## run RMassBank
-  library("RMassBank")
+  #library("RMassBank")
   
   ## adapt RMassBank settings
   RMassBank.env$verbose.output <- TRUE
@@ -2825,7 +2833,7 @@ enrichRecordWithNames <- function(folder){
   filePaths <- list.files(path = recordFolder, pattern = "[A-Z0-9]{8,8}\\.txt$", full.names=TRUE)
   print(paste("Enriching", length(filePaths), "files in folder", folder))
   
-  library("jsonlite")
+  #library("jsonlite")
   for(filePath in filePaths){
     lines <- readLines(con = filePath)
     indecesNames <- which(grepl(x = lines, pattern = "^CH\\$NAME"))
@@ -3030,7 +3038,7 @@ enrichRecordWithNames_save <- function(folder){
     allNames[!isID][2001:3000]
     
     allCIDs <- unique(allCIDs)
-    library("jsonlite")
+    #library("jsonlite")
     synonyms_m <- unique(unlist(sapply(X = allCIDs, FUN = function(cid){
       ## https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/16219824/synonyms/JSON
       url <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/", cid, "/synonyms/JSON", sep = "")
@@ -3048,7 +3056,7 @@ aggregateSpectra_all <- function(parentFolder, aggregationFolder){
   aggregateSpectra_ready(contributorFolders, aggregationFolder, tag = "all")
 }
 aggregateSpectra_ready <- function(contributorFolders, aggregationFolder, tag){
-  library("stringr")
+  #library("stringr")
   
   ## msps
   mspFolders <- paste(contributorFolders, "converted to msp", sep = "/")
@@ -3442,8 +3450,8 @@ sunBurstPlotFromSubstanceClasses <- function(classifierClasses, numberOfSpectra,
   
   ## If you use it in published research, please cite:
   ##  Gu, Z. circlize implements and enhances circular visualization in R. Bioinformatics 2014.
-  library("circlize")
-  library("plotrix")
+  #library("circlize")
+  #library("plotrix")
   desat <- function(cols, sat=0.5) {
     X <- diag(c(1, sat, 1)) %*% rgb2hsv(col2rgb(cols))
     hsv(X[1,], X[2,], X[3,])
@@ -3663,7 +3671,7 @@ sunBurstPlotFromSubstanceClasses <- function(classifierClasses, numberOfSpectra,
   
   ## legend
   if(!noQualities | !noPValues){
-    library("squash")
+    #library("squash")
     #colfunc <- colorRampPalette(c("white", "red"))
     #legend_image <- as.raster(matrix(colfunc(20), ncol=1))
     #rasterImage(legend_image, 0, 0, 1,1)
