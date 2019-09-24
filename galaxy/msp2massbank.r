@@ -12,8 +12,8 @@ library(RMassBank)
 #library("RMassBank", lib.loc="/home/kpeters/R/x86_64-pc-linux-gnu-library/3.5/")
 #source("/tmp/RMassBank/R/formulaCalculator.R")
 #source("/tmp/RMassBank/R/leCsvAccess.R")
-source("/usr/src/RMassBank/R/formulaCalculator.R")
-source("/usr/src/RMassBank/R/leCsvAccess.R")
+#source("/usr/src/RMassBank/R/formulaCalculator.R")
+#source("/usr/src/RMassBank/R/leCsvAccess.R")
 library(readxl)
 library(webchem)
 library(circlize)
@@ -69,10 +69,10 @@ knownAccessionPrefixes <- c(
   "UF", "UN", "UO", "UP", "UPA", "UT", "WA"
 )
 
-knownAdducts <- getAdductInformation("")$adductString# c("[M+H]+", "[M+Na]+", "[M+K]+", "[M]+", "[M+NH4]+", "[M+ACN+H]+", "[M+ACN+Na]+", "[M+2Na-H]+", "[2M+H]+", "[2M+K]+", "[2M+Na]+", "[2M+NH4]+", "[2M+ACN+H]+", "[M+ACN+2H]2+", "[M+2H]2+", "[M-H]-", "[M]-", "[M+FA]-") ## --> adductToIonMode
+knownAdducts <- RMassBank:::getAdductInformation("")$adductString# c("[M+H]+", "[M+Na]+", "[M+K]+", "[M]+", "[M+NH4]+", "[M+ACN+H]+", "[M+ACN+Na]+", "[M+2Na-H]+", "[2M+H]+", "[2M+K]+", "[2M+Na]+", "[2M+NH4]+", "[2M+ACN+H]+", "[M+ACN+2H]2+", "[M+2H]2+", "[M-H]-", "[M]-", "[M+FA]-") ## --> adductToIonMode
 adductOverview <- function(){
   #library("RMassBank")
-  adductDf <- getAdductInformation("C100")
+  adductDf <- RMassBank:::getAdductInformation("C100")
   massAdditions <- sapply(X = adductDf$addition, FUN = RMassBank:::getMonoisotopicMass)
   adductDf$massAddition <- massAdditions
   adductDf <- adductDf[adductDf$massAddition < 1000,]
@@ -1162,7 +1162,7 @@ adductToIonMode <- function(adduct){
   ## p2H [M+2H]2+
   
   ## findMz.formula("C6H12O6", "")
-  adducts <- getAdductInformation("")[, c("mode", "adductString")]
+  adducts <- RMassBank:::getAdductInformation("")[, c("mode", "adductString")]
   if(!(adduct %in% adducts$adductString))
     stop(paste("Unknown adduct '", adduct, "'", sep = ""))
   ionMode <- adducts$mode[adducts$adductString==adduct]
@@ -2058,7 +2058,7 @@ aggregateSummary <- function(folder, folder_parts){
   
   cat("\nPostprocess nice summary")
   ## replace precursor mode by readyble adduct
-  adducts <- getAdductInformation("")[, c("mode", "adductString")]
+  adducts <- RMassBank:::getAdductInformation("")[, c("mode", "adductString")]
   aggregatedPeaksDf_slim$precursor_mode <- unlist(sapply(X = aggregatedPeaksDf_slim$precursor_mode, FUN = function(precursor_mode){
     if(precursor_mode %in% adducts$mode)
       return(adducts$adductString[adducts$mode==precursor_mode])
@@ -2103,6 +2103,7 @@ runContributorToMassBankWorkflow <- function(folder, applyIntensityThreshold = F
   #library("RMassBank")
   
   ## adapt RMassBank settings
+  RMassBank.env <- new.env()
   RMassBank.env$verbose.output <- TRUE
   RMassBank.env$export.invalid <- TRUE
   RMassBank.env$export.molfiles <- FALSE
@@ -2146,9 +2147,9 @@ runContributorToMassBankWorkflow <- function(folder, applyIntensityThreshold = F
     loadRmbSettings(file_or_list = fileSettings_parts[[partIdx]])
     #options("RMassBank")
     ## do not fix the multiplicityFilter
-    #settings <- getOption("RMassBank")
-    #settings$multiplicityFilter <- NULL
-    #options(RMassBank = settings)
+    settings <- getOption("RMassBank")
+    settings$multiplicityFilter <- NULL
+    options(RMassBank = settings)
     
     
     #if(length(list.files(file.path(getOption("RMassBank")$annotations$entry_prefix, "recdata"))) > 0)      {print("done");next;}
@@ -2257,6 +2258,11 @@ runContributorToMassBankWorkflow <- function(folder, applyIntensityThreshold = F
     }
     
     mb <- loadInfolist(mb = mb, fileName = mergedInfoListFile)
+    
+    # EVIL fix
+    settings <- getOption("RMassBank")
+    settings$annotations$publication <- " "
+    options(RMassBank = settings)
     #mb <- mbWorkflow(mb = mb, steps = 3)
     mb <- mbWorkflow(mb = mb, steps = c(3,4,5,7))
     #mb <- mbWorkflow(mb = mb, steps = 3:8)
@@ -2285,6 +2291,7 @@ runContributorToMassBankWorkflow <- function(folder, applyIntensityThreshold = F
   aggregateMsp(folder_parts, folderMsp)
   aggregateMassBankRecords(folder_parts, folderMassBank)
   aggregateSummary(folder, folder_parts)
+  fileAnnoTable<-NULL
   createSunBurstPlot(folder, fileAnnoTable)
   resultsWithError <- validateRecords(folder)
   if(length(resultsWithError) > 0){
@@ -3208,9 +3215,9 @@ validateRecords <- function(folder){
   if(length(files)==0) return(character())
   cat(paste("\nValidating", length(files), "records in folder", folder, "\n"))
   results <- lapply(X = files, FUN = function(file){
-    cmd <- paste("/bin/bash /Massbank/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib-0.0.1-default/MassBank-lib-0.0.1/bin/Validator ", gsub(x = file, pattern = " ", replacement = "\\\\ "), "", sep = "")
+    cmd <- paste("/bin/bash /usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Validator ", gsub(x = file, pattern = " ", replacement = "\\\\ "), "", sep = "")
     out <- suppressWarnings(expr = {
-      system(command = cmd, intern = TRUE)
+      system(command = cmd, intern = FALSE)
     })
     return(out)
   })
@@ -3900,11 +3907,6 @@ getInfoFixKey <- function(Directory, csvname, babel_dir, verbose.output=TRUE){
 
 # Run
 preprocessContributorToMassBankWorkflow(folder, accessionPrefix, xlsxFile, ms_type, takeRecordedNames)
-
-# Just another namespace bug
-#source("/tmp/RMassBank/R/leCsvAccess.R")
-source("/usr/src/RMassBank/R/leCsvAccess.R")
-
 runContributorToMassBankWorkflow(folder, applyIntensityThreshold, reprocess = FALSE)
 
 # Utility
