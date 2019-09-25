@@ -12,7 +12,8 @@
 msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name"; 
 ls -R /tmp/msp2massbank;
 msp2massbank.r "$accession_prefix" "$excel_file.name";
-zip -9 $massbank_file /tmp/msp2massbank/converted\ to\ MassBank/;
+zip -9r /tmp/converted_to_massbank.zip /tmp/msp2massbank/converted\ to\ MassBank/;
+cat /tmp/converted_to_massbank.zip > $massbank_file;
   ]]>
   </command>
   <inputs>
