@@ -2464,7 +2464,7 @@ correctRecords <- function(folder, applyIntensityThreshold = FALSE){
       if(!any(grepl(x = lines2, pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE")))
         next
       idx <- which(grepl(x = lines2, pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE"))
-      lines2[[idx]] <- gsub(x = lines2[[idx]], pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE", replacement = "AC$CHROMATOGRAPHY: COLUMN_TEMPERATURE")
+      lines2[[idx]] <- gsub(x = lines2[[idx]], pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE:", replacement = "AC$CHROMATOGRAPHY: COLUMN_TEMPERATURE")
     }
     ## duplicated peak list
     if(TRUE){
