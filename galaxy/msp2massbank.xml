@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<tool id="msp2massbank" name="msp2massbank" version="0.1">
+<tool id="msp2massbank" name="msp2massbank" version="0.2">
   <requirements>
     <container type="docker">korseby/msp2massbank</container>
   </requirements>
@@ -12,9 +12,11 @@
 msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name"; 
 ls -R /tmp/msp2massbank;
 msp2massbank.r "$accession_prefix" "$excel_file.name";
-cd /tmp/msp2massbank/converted\ to\ MassBank/;
-zip -9r /tmp/converted_to_massbank.zip *;
-cat /tmp/converted_to_massbank.zip > $massbank_file;
+cp /tmp/msp2massbank/converted\ to\ MassBank/* massbank_folder/;
+ls -al massbank_folder/;
+#cd /tmp/msp2massbank/converted\ to\ MassBank/;
+#zip -9r /tmp/converted_to_massbank.zip *;
+#cat /tmp/converted_to_massbank.zip > $massbank_file;
   ]]>
   </command>
   <inputs>
@@ -23,7 +25,10 @@ cat /tmp/converted_to_massbank.zip > $massbank_file;
     <param name="accession_prefix" type="text" value="IH" optional="False" label="Accession prefix" help="MassBank accession prefix" />
   </inputs>
   <outputs>
-    <data name="massbank_file" type="data" format="zip" label="MassBank records" />
+    <!-- <data name="massbank_file" type="data" format="zip" label="MassBank records" /> -->
+    <collection type="list" label="MassBank records" format="txt" name="massbank_files" >
+      <discover_datasets pattern="__name__" directory="massbank_folder" type="data" format="txt" visible="False" />
+    </collection>
   </outputs>
   <help>
 .. class:: infomark
@@ -34,15 +39,15 @@ cat /tmp/converted_to_massbank.zip > $massbank_file;
 
 ---------------------------------------------------
 
-========================
-MSP to MetFrag parameter
-========================
+===============
+MSP to MassBank
+===============
 
 -----------
 Description
 -----------
 
-| Read spectra from MSP file and create MetFrag parameter file.
+| Convert MSP library to MassBank records.
 
 -----------
 Input files
@@ -51,63 +56,16 @@ Input files
 +------------------------------+------------+
 | File                         |   Format   |
 +==============================+============+
-| 1)  MSP file(s)              |   MSP      |
+| 1)  MSP library              |   MSP      |
+| 2)  Excel file               |  XLSX      |
 +------------------------------+------------+
 
 ----------
 Parameters
 ----------
 	  
-Intensity threshold of largest peak
-        | The threshold the largest peak must have to be recognized.
-        |
-
-Minimum proportion of peaks
-        | All peaks less than a percentage value with regard to the largest peak are rejected.
-        |
-
-Neutral losses of precursor to fragments
-        | Add neutral losses of precursor to fragments of the spectrum.
-        |
-
-Neutral losses of fragments to fragments
-        | Add neutral losses among fragments to fragments of the spectrum.
-        |
-
-Polarity
-        | The polarity used for the mode of acquisition.
-        |
-
-Precursor ion type
-        | The ion type of the precursor.
-        |
-
-Database Search Relative Mass Deviation
-        | A value in ppm that defines the deviation of theoretical masses in the database vs. the measured masses.
-        |
-
-Fragment Peak Match Absolute Mass Deviation
-        | Absolute mass deviation in Dalton of theoretical fragment peaks vs. measured fragment peaks.
-        |
-
-Fragment Peak Match Relative Mass Deviation
-        | Relative mass deviation in ppm of theoretical fragment peaks vs. measured fragment peaks.
-        |
-
-Suspect list
-        | Choose whether to include a file containing a list of suspects.
-        |
-
-MetFrag Score Types
-        | The type of scores MetFrac is using for the calculations. Please do not change the values unless you know what you are doing!
-        |
-
-MetFrag Score Weights
-        | The weights of the different score types, separated with a comma and without whitespaces. 1.0 means 100%.
-        |
-
-MetFrag Database Type
-        | Database to choose from.
+Accession prefix
+        | The accession prefix for the MassBank records.
         |
 
 ------------
@@ -117,16 +75,10 @@ Output files
 +------------------------------------------+--------+
 | Files                                    | Format |
 +==========================================+========+
-| 1)  (Multiple) MetFrag parameter list(s) |  TXT   |
+| 1)  (Multiple) MassBank records          |  TXT   |
 +------------------------------------------+--------+
 
 ---------------------------------------------------
-
--------
-Changes
--------
-
-Version: 1.0
 
   </help>
 </tool>
