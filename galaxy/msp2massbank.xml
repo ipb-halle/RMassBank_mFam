@@ -14,9 +14,6 @@ ls -R /tmp/msp2massbank;
 msp2massbank.r "$accession_prefix" "$excel_file.name";
 cp /tmp/msp2massbank/converted\ to\ MassBank/* massbank_folder/;
 ls -al massbank_folder/;
-#cd /tmp/msp2massbank/converted\ to\ MassBank/;
-#zip -9r /tmp/converted_to_massbank.zip *;
-#cat /tmp/converted_to_massbank.zip > $massbank_file;
   ]]>
   </command>
   <inputs>
