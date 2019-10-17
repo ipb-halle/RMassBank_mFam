@@ -2460,11 +2460,11 @@ correctRecords <- function(folder, applyIntensityThreshold = FALSE){
         print(paste("CH$NAME/TITLE italics and characters ’→", basename(filePath), filePath, sep = "\t"))
     }
     ## remove character :
-    if(FALSE){
+    if(TRUE){
       if(!any(grepl(x = lines2, pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE")))
         next
       idx <- which(grepl(x = lines2, pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE"))
-      lines2[[idx]] <- gsub(x = lines2[[idx]], pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE:", replacement = "AC$CHROMATOGRAPHY: COLUMN_TEMPERATURE")
+      lines2[[idx]] <- gsub(x = lines2[[idx]], pattern = "^AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE:", replacement = "AC\\$CHROMATOGRAPHY: COLUMN_TEMPERATURE")
     }
     ## duplicated peak list
     if(TRUE){

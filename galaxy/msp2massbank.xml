@@ -9,11 +9,13 @@
     <exit_code range="1:" level="fatal" description="Tool error" />
   </stdio>
   <command><![CDATA[
-msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name"; 
+export __job_directory__=`pwd`;
+mkdir \$__job_directory__/massbank_folder;
+$__tool_directory__/msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name";
+$__tool_directory__/msp2massbank.r "$accession_prefix" "$excel_file.name";
 ls -R /tmp/msp2massbank;
-msp2massbank.r "$accession_prefix" "$excel_file.name";
-cp /tmp/msp2massbank/converted\ to\ MassBank/* massbank_folder/;
-ls -al massbank_folder/;
+cp /tmp/msp2massbank/converted\ to\ MassBank/* \$__job_directory__/massbank_folder/;
+ls -al \$__job_directory__/massbank_folder/;
   ]]>
   </command>
   <inputs>
@@ -22,7 +24,9 @@ ls -al massbank_folder/;
     <param name="accession_prefix" type="text" value="IH" optional="False" label="Accession prefix" help="MassBank accession prefix" />
   </inputs>
   <outputs>
-    <!-- <data name="massbank_file" type="data" format="zip" label="MassBank records" /> -->
+<!--
+    <data name="massbank_file" type="data" format="zip" label="MassBank records" />
+-->
     <collection type="list" label="MassBank records" format="txt" name="massbank_files" >
       <discover_datasets pattern="__name__" directory="massbank_folder" type="data" format="txt" visible="False" />
     </collection>
