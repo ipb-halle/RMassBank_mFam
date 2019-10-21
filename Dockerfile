@@ -4,7 +4,7 @@ MAINTAINER Kristian Peters (kpeters@ipb-halle.de)
 
 # Add cran R backport
 ENV DEBIAN_FRONTEND="noninteractive"
-RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install apt-transport-https perl
+RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install apt-transport-https perl locales
 RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/" >> /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 
