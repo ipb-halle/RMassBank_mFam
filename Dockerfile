@@ -32,7 +32,7 @@ RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
 
 # Install MassBank validator
 WORKDIR /usr/src
-RUN git clone https://github.com/MassBank/MassBank-web
+RUN git clone --single-branch --branch dev https://github.com/MassBank/MassBank-web
 WORKDIR /usr/src/MassBank-web/MassBank-Project/
 RUN mvn package
 
