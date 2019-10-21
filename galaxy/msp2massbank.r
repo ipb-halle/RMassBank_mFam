@@ -2384,7 +2384,19 @@ correctRecords <- function(folder, applyIntensityThreshold = FALSE){
   for(filePath in filePaths){
     lines <- readLines(con = filePath)
     lines2 <- lines
-    
+
+    # remove duplicates in peak list
+    #if (TRUE) {
+    #  record <- lines2
+    #  peaksStart <- which(grepl(x = record, pattern = "^PK\\$PEAK:")) + 1
+    #  peaksEnd <- which(grepl(x = record, pattern = "^//$"))      - 1
+    #  peaks <- unique(strsplit(x = trimws(record[peaksStart:peaksEnd]), split = " "))
+    #  lines2 <- c(record[c(1:peaksStart-1)], peaks, record[c(peaksEnd+1):length(lines2)])
+    #  lines <- lines2
+    #  print("Duplicate entries in peak list removed.")
+    #  print(lines2)
+    #}
+
     ## switch two lines
     if(FALSE){
       if(!any(grepl(x = lines2, pattern = "^SP\\$SAMPLE")))
@@ -2490,7 +2502,7 @@ correctRecords <- function(folder, applyIntensityThreshold = FALSE){
         warning(paste("### Peak duplicates: anno not implemented yet", paste(PK_ANNOTATION_idx, collapse = "; "), filePath))
       }
     }
-    ## sort peak list
+    ## sort annotated peak list
     if(TRUE){
       isPeakLine <- grepl(x = lines2, pattern = "^  \\d+.*")
       peakLines <- lines2[isPeakLine]
@@ -2616,10 +2628,10 @@ correctRecords <- function(folder, applyIntensityThreshold = FALSE){
       }
     }
     
-    if(!isTRUE(all.equal(lines, lines2))){
+    #if(!isTRUE(all.equal(lines, lines2))){
       writeLines(con = filePath, text = lines2)
       print(paste("Corrected", filePath))
-    }
+    #}
   }
   
   options(warn = 2)
