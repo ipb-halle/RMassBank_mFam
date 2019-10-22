@@ -1,24 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<tool id="mm-recview" name="mb-recview" version="0.3">
+<tool id="mb-validate" name="mb-validate" version="0.3">
   <requirements>
     <container type="docker">korseby/msp2massbank</container>
   </requirements>
-  <description>View MassBank record(s)</description>
+  <description>Validate MassBank record(s)</description>
   <stdio>
     <regex match="" source="stderr" level="warning" description="R messages" />
     <exit_code range="1:" level="fatal" description="Tool error" />
   </stdio>
   <command><![CDATA[
 export __job_directory__=`pwd`;
-touch $massbank_recview;
-/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Inspector $massbank_record $massbank_recview;
+/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Validator $mb_input;
+cat $mb_input > $mb_output;
   ]]>
   </command>
   <inputs>
-    <param name="massbank_record" type="data" format="txt" optional="False" multiple="False" label="MassBank record" />
+    <param name="mb_input" type="data" format="txt" optional="False" multiple="False" label="Input MassBank record" />
   </inputs>
   <outputs>
-    <data name="massbank_recview" type="data" format="html" label="${massbank_record.display_name} Info" />
+    <data name="mb_output" type="data" format="txt" label="Validated ${mb_input.display_name}" />
   </outputs>
   <help>
 .. class:: infomark
@@ -29,15 +29,15 @@ touch $massbank_recview;
 
 ---------------------------------------------------
 
-======================
-MassBank Record Viewer
-======================
+=========================
+Validate MassBank Records
+=========================
 
 -----------
 Description
 -----------
 
-| View information on MassBank records.
+| This module validates one MassBank record or several records in a collection. It fails when there is an error. For warning messages, please refer the Tool Standard Output. 
 
 -----------
 Input files
