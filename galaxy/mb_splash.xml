@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<tool id="mb-splash" name="mb-splash" version="0.3">
+  <requirements>
+    <container type="docker">korseby/msp2massbank</container>
+  </requirements>
+  <description>Insert or update SPLASH of MassBank record(s)</description>
+  <stdio>
+    <regex match="" source="stderr" level="warning" description="R messages" />
+    <exit_code range="1:" level="fatal" description="Tool error" />
+  </stdio>
+  <command><![CDATA[
+export __job_directory__=`pwd`;
+$__tool_directory__/mb_splash.r $mb_input $mb_output;
+  ]]>
+  </command>
+  <inputs>
+    <param name="mb_input" type="data" format="txt" optional="False" multiple="False" label="Input MassBank record" />
+  </inputs>
+  <outputs>
+    <data name="mb_output" type="data" format="txt" label="Splashed ${mb_input.display_name}" />
+  </outputs>
+  <help>
+.. class:: infomark
+
+**Authors**
+
+| **Kristian Peters (kpeters@ipb-halle.de)** wrote and maintains this module.
+
+---------------------------------------------------
+
+===========================================
+Insert or update SPLASH of MassBank Records
+===========================================
+
+-----------
+Description
+-----------
+
+| This module inserts or updates the SPLASH of one MassBank record or several records in a collection. 
+
+-----------
+Input files
+-----------
+
++-----------------------------------------+------------+
+| File                                    |   Format   |
++=========================================+============+
+| 1)  (Multiple) MassBank record(s)       |   TXT      |
++-----------------------------------------+------------+
+
+------------
+Output files
+------------
+
++------------------------------------------+--------+
+| Files                                    | Format |
++==========================================+========+
+| 1)  (Multiple) MassBank record(s)        |  HTML  |
++------------------------------------------+--------+
+
+---------------------------------------------------
+
+  </help>
+</tool>
+

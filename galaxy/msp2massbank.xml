@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<tool id="msp2massbank" name="msp2massbank" version="0.2">
+<tool id="msp2massbank" name="msp2massbank" version="0.3">
   <requirements>
     <container type="docker">korseby/msp2massbank</container>
   </requirements>
@@ -13,7 +13,6 @@ export __job_directory__=`pwd`;
 mkdir \$__job_directory__/massbank_folder;
 $__tool_directory__/msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "$excel_file.name";
 $__tool_directory__/msp2massbank.r "$accession_prefix" "$excel_file.name";
-$__tool_directory__/massbank_recfix.sh;
 ls -R /tmp/msp2massbank;
 cp /tmp/msp2massbank/converted\ to\ MassBank/* \$__job_directory__/massbank_folder/;
 ls -al \$__job_directory__/massbank_folder/;

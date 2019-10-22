@@ -1,24 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<tool id="massbankrecview" name="massbankrecview" version="0.2">
+<tool id="mb-trimpeaks" name="mb-trimpeaks" version="0.3">
   <requirements>
     <container type="docker">korseby/msp2massbank</container>
   </requirements>
-  <description>View spectrum of MassBank record(s)</description>
+  <description>Trim peaks of MassBank record(s)</description>
   <stdio>
     <regex match="" source="stderr" level="warning" description="R messages" />
     <exit_code range="1:" level="fatal" description="Tool error" />
   </stdio>
   <command><![CDATA[
 export __job_directory__=`pwd`;
-touch $massbank_recview;
-/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Inspector $massbank_record $massbank_recview;
+$__tool_directory__/mb_trimpeaks.sh $mb_input $mb_output;
   ]]>
   </command>
   <inputs>
-    <param name="massbank_record" type="data" format="txt" optional="False" multiple="False" label="MassBank record" />
+    <param name="mb_input" type="data" format="txt" optional="False" multiple="False" label="Input MassBank record" />
   </inputs>
   <outputs>
-    <data name="massbank_recview" type="data" format="html" label="${massbank_record.display_name} Info" />
+    <data name="mb_output" type="data" format="txt" label="Trimmed ${mb_input.display_name}" />
   </outputs>
   <help>
 .. class:: infomark
@@ -29,15 +28,15 @@ touch $massbank_recview;
 
 ---------------------------------------------------
 
-======================
-MassBank Record Viewer
-======================
+=============================
+Trim peaks of MassBank Record
+=============================
 
 -----------
 Description
 -----------
 
-| View information on MassBank records.
+| Sometimes, the peak list of a MassBank record contains duplicated peaks. This script trims and removes all duplicate lines. 
 
 -----------
 Input files
