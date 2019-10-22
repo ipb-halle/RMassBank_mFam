@@ -23,14 +23,16 @@ RUN R -e 'install.packages(c("devtools","readxl","webchem","jsonlite","rcdk","ci
 # Install  Bioconductor 
 RUN R CMD javareconf
 RUN R -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install(version = "3.10", ask = FALSE, update = TRUE); BiocManager::install(c("multtest","MSnbase","mzR","MassSpecWavelet","S4Vectors","BiocStyle","faahKO","msdata","xcms","CAMERA"), ask = FALSE, update = TRUE)'
-RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank", ref="treutler-merge")'
+#RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank", ref="treutler-merge")'
+RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank")'
 RUN R -e 'library(devtools); install_github(repo = "CDK-R/rinchi@master")'
 
 # Install RMassBank
 WORKDIR /usr/src
-RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
+#RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
+RUN git clone https://github.com/MassBank/RMassBank
 
-# Install MassBank validator
+# Install MassBank
 WORKDIR /usr/src
 RUN git clone --single-branch --branch dev https://github.com/MassBank/MassBank-web
 WORKDIR /usr/src/MassBank-web/MassBank-Project/

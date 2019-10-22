@@ -10,7 +10,7 @@
   </stdio>
   <command><![CDATA[
 export __job_directory__=`pwd`;
-/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Validator $mb_input;
+/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Validator $mb_input || exit 1;
 cat $mb_input > $mb_output;
   ]]>
   </command>
