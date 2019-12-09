@@ -15,6 +15,7 @@ $__tool_directory__/msp2massbank.sh "$msp_file" "$msp_file.name" "$excel_file" "
 $__tool_directory__/msp2massbank.r "$accession_prefix" "$excel_file.name";
 ls -R /tmp/msp2massbank;
 cp /tmp/msp2massbank/converted\ to\ MassBank/* \$__job_directory__/massbank_folder/;
+cat /tmp/msp2massbank/converted\ to\ msp/*.msp >> "$msp_agg_outfile";
 ls -al \$__job_directory__/massbank_folder/;
   ]]>
   </command>
@@ -30,6 +31,7 @@ ls -al \$__job_directory__/massbank_folder/;
     <collection type="list" label="MassBank records" format="txt" name="massbank_files" >
       <discover_datasets pattern="__name__" directory="massbank_folder" type="data" format="txt" visible="False" />
     </collection>
+    <data name="msp_agg_outfile" type="data" format="txt" label="Converted MassBank MSP records" />
   </outputs>
   <help>
 .. class:: infomark
@@ -73,11 +75,12 @@ Accession prefix
 Output files
 ------------
 
-+------------------------------------------+--------+
-| Files                                    | Format |
-+==========================================+========+
-| 1)  (Multiple) MassBank records          |  TXT   |
-+------------------------------------------+--------+
++-------------------------------------------+--------+
+| Files                                     | Format |
++===========================================+========+
+| 1)  (Multiple) MassBank records           |  TXT   |
+| 2)  (Multiple) Converted MassBank records |  MSP   |
++-------------------------------------------+--------+
 
 ---------------------------------------------------
 
