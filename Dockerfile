@@ -1,12 +1,12 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 
 MAINTAINER Kristian Peters (kpeters@ipb-halle.de)
 
 # Add cran R backport
 ENV DEBIAN_FRONTEND="noninteractive"
-RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install apt-transport-https perl locales
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/" >> /etc/apt/sources.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install ca-certificates apt-transport-https perl locales gnupg2
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" >> /etc/apt/sources.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 
 # Generate locales
 ENV LC_ALL="en_US.UTF-8"
@@ -15,7 +15,7 @@ RUN locale-gen $LC_ALL
 RUN dpkg-reconfigure locales
 
 # Install packages
-RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y install apt-transport-https make gcc gfortran g++ libblas-dev liblapack-dev libxml++2.6-dev libexpat1-dev libxml2-dev libnetcdf-dev libnetcdff-dev libssl-dev r-base r-base-dev maven texlive-latex-base texlive-latex-recommended texlive-fonts-recommended git openjdk-8-jdk-headless openjdk-8-jre-headless pkg-config parallel wget curl git unzip zip python3 openbabel maven
+RUN apt-get -y update && apt-get -y dist-upgrade && apt-get -y --allow-unauthenticated install apt-transport-https make gcc gfortran g++ libblas-dev liblapack-dev libxml++2.6-dev libexpat1-dev libxml2-dev libnetcdf-dev libssl-dev pkg-config wget curl git unzip zip python3 python3-pip r-base r-base-dev pandoc pandoc-data openjdk-11-jdk pkg-config parallel wget curl git unzip zip python3 openbabel maven
 
 # Install R packages
 RUN R -e 'install.packages(c("devtools","readxl","webchem","jsonlite","rcdk","circlize","plotrix","squash"))'
