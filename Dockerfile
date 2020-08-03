@@ -27,6 +27,9 @@ RUN R -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages
 RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank")'
 RUN R -e 'library(devtools); install_github(repo = "CDK-R/rinchi@master")'
 
+# Install old version of webchem
+RUN R -e 'devtools::install_github("ropensci/webchem", ref="8c9324225d161158bf12e26f688a331201ec9647")'
+
 # Install RMassBank
 WORKDIR /usr/src
 #RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
