@@ -32,8 +32,8 @@ RUN R -e 'devtools::install_github("ropensci/webchem", ref="8c9324225d161158bf12
 
 # Install RMassBank
 WORKDIR /usr/src
-#RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
-RUN git clone https://github.com/MassBank/RMassBank
+RUN git clone --branch treutler-merge https://github.com/MassBank/RMassBank
+#RUN git clone https://github.com/MassBank/RMassBank
 
 # Install MassBank
 WORKDIR /usr/src
