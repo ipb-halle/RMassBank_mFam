@@ -122,24 +122,14 @@ aggregationFolder <- paste(parentFolder, "mFam Aggregation", sep = "")
 
 Start the container with `docker run -v $PWD/data:/data -w /data -it --rm sneumann/msp2massbank
 bash`
-and 
 
+and run the example data:
 
 ```
 
-export __job_directory__=/tmp 
-mkdir -p "/tmp/msp2massbank/meta data/data/" 
-/usr/local/bin/msp2massbank.sh 2019731210_spectra_0.msp 2019731210_spectra_0.msp test.xlsx test.xslx
+mkdir /tmp/msp2massbank/
+cp -avx /data/* /tmp/msp2massbank/
 
-mkdir -p "/tmp/msp2massbank/meta data/data/"
-cp test.xlsx "/tmp/msp2massbank/meta data/data/"
-
-mkdir -p "/tmp/msp2massbank/converted to MassBank/"
-
-/usr/local/bin/msp2massbank.r "XY" /data/test.xlsx
-
-
-
-
+/usr/local/bin/msp2massbank.r "XY" test.xlsx
 
 ```
