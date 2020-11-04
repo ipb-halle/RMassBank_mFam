@@ -117,3 +117,29 @@ aggregationFolder <- paste(parentFolder, "mFam Aggregation", sep = "")
 #aggregateSpectra_all(parentFolder, aggregationFolder)
 #aggregateSpectra_ready(processedFolders, aggregationFolder, tag = "Validated")
 ```
+
+### Test in Docker 
+
+Start the container with `docker run -v $PWD/data:/data -w /data -it --rm sneumann/msp2massbank
+bash`
+and 
+
+
+```
+
+export __job_directory__=/tmp 
+mkdir -p "/tmp/msp2massbank/meta data/data/" 
+/usr/local/bin/msp2massbank.sh 2019731210_spectra_0.msp 2019731210_spectra_0.msp test.xlsx test.xslx
+
+mkdir -p "/tmp/msp2massbank/meta data/data/"
+cp test.xlsx "/tmp/msp2massbank/meta data/data/"
+
+mkdir -p "/tmp/msp2massbank/converted to MassBank/"
+
+/usr/local/bin/msp2massbank.r "XY" /data/test.xlsx
+
+
+
+
+
+```
