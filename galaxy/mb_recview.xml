@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<tool id="mm-recview" name="mb-recview" version="0.3">
+  <requirements>
+    <container type="docker">korseby/msp2massbank</container>
+  </requirements>
+  <description>View MassBank record(s)</description>
+  <stdio>
+    <regex match="" source="stderr" level="warning" description="R messages" />
+    <exit_code range="1:" level="fatal" description="Tool error" />
+  </stdio>
+  <command><![CDATA[
+export __job_directory__=`pwd`;
+touch $massbank_recview;
+/usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Inspector $massbank_record $massbank_recview;
+  ]]>
+  </command>
+  <inputs>
+    <param name="massbank_record" type="data" format="txt" optional="False" multiple="False" label="MassBank record" />
+  </inputs>
+  <outputs>
+    <data name="massbank_recview" type="data" format="html" label="${massbank_record.display_name} Info" />
+  </outputs>
+  <help>
+.. class:: infomark
+
+**Authors**
+
+| **Kristian Peters (kpeters@ipb-halle.de)** wrote and maintains this module.
+
+---------------------------------------------------
+
+======================
+MassBank Record Viewer
+======================
+
+-----------
+Description
+-----------
+
+| View information on MassBank records.
+
+-----------
+Input files
+-----------
+
++-----------------------------------------+------------+
+| File                                    |   Format   |
++=========================================+============+
+| 1)  (Multiple) MassBank record(s)       |   TXT      |
++-----------------------------------------+------------+
+
+------------
+Output files
+------------
+
++------------------------------------------+--------+
+| Files                                    | Format |
++==========================================+========+
+| 1)  (Multiple) MassBank record(s)        |  HTML  |
++------------------------------------------+--------+
+
+---------------------------------------------------
+
+  </help>
+</tool>
+
