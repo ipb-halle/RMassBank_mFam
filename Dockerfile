@@ -23,18 +23,15 @@ RUN R -e 'install.packages(c("devtools","readxl","webchem","jsonlite","rcdk","ci
 # Install  Bioconductor 
 RUN R CMD javareconf
 RUN R -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install(ask = FALSE, update = TRUE); BiocManager::install(c("multtest","MSnbase","mzR","MassSpecWavelet","S4Vectors","BiocStyle","faahKO","msdata","xcms","CAMERA"), ask = FALSE, update = TRUE)'
-RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank", ref="c579455cff45d1971c029a9af9189a9e65429e16")'
-#RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank", ref="treutler-merge")'
-#RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBank/RMassBank")'
+RUN R -e 'BiocManager::install(c("RMassBank"), ask = FALSE, update = TRUE)'
+
 RUN R -e 'library(devtools); install_github(repo = "CDK-R/rinchi@master")'
 
 # Install old version of webchem
-RUN R -e 'devtools::install_github("ropensci/webchem", ref="8c9324225d161158bf12e26f688a331201ec9647")'
+#RUN R -e 'devtools::install_github("ropensci/webchem", ref="8c9324225d161158bf12e26f688a331201ec9647")'
 
-# Install RMassBank
-WORKDIR /usr/src
-RUN git clone https://github.com/MassBank/RMassBank ; cd RMassBank ; git checkout c579455cff45d1971c029a9af9189a9e65429e16
-#RUN git clone https://github.com/MassBank/RMassBank
+# Install current version of webchem
+RUN R -e 'devtools::install_github("ropensci/webchem")'
 
 # Install MassBank
 WORKDIR /usr/src
@@ -46,7 +43,7 @@ RUN mvn package
 RUN apt-get -y --purge --auto-remove remove make gcc gfortran g++
 RUN apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/{cache,log}/ /tmp/* /var/tmp/*
 
-# Add scripts folder to container
+# Add Galaxy scripts folder to container
 ADD galaxy/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
