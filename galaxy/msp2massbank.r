@@ -123,12 +123,20 @@ preprocessData_compoundInformation <- function(metaDataCompoundsDf){
   ## smiles / inchiKey to inchi
   cat("to inchi...")
   inchiKeyToInchi <- vector(mode = "character", length = 0)
-  if(length(inchiKeys) > 0)
+  
+  if(length(inchiKeys) > 0) {
     #inchiKeyToInchi <- sapply(X = inchiKeys,  FUN = function(inchiKey){ webchem::cs_inchikey_inchi(inchikey = inchiKey, verbose = FALSE) })
-    inchiKeyToInchi <- sapply(X = inchiKeys,  FUN = function(inchiKey){ tryCatch({webchem::cs_convert(inchiKey, from="inchiKey", to="inchi", verbose = FALSE)}, warning = function(w) {ifelse(test = w$message=="inchikey not found... Returning NA.", yes = NA, no = warning(w))}) })
+    #inchiKeyToInchi <- sapply(X = inchiKeys,  FUN = function(inchiKey){ tryCatch({webchem::cs_convert(inchiKey, from="inchiKey", to="inchi", verbose = 
+    inchiKeyToInchi <- cts_convert(inchiKeys, "inchikey", "inchi")
+    }
+  
   smilesToInchi <- vector(mode = "character", length = 0)
-  if(length(smiles) > 0)
-    smilesToInchi   <- sapply(X = smiles,     FUN = function(smile   ){ tryCatch({webchem::cs_convert(smile, from="smiles", to="inchi", verbose = FALSE)}, warning = function(w) {ifelse(test = w$message=="smiles not found... Returning NA.",    yes = NA, no = warning(w))}) })
+  if(length(smiles) > 0) {
+    #smilesToInchi   <- sapply(X = smiles,     FUN = function(smile   ){ tryCatch({webchem::cs_convert(smile, from="smiles", to="inchi", verbose = FALSE
+    sp <- get.smiles.parser()
+    mols <- parse.smiles(smiles)
+    smilesToInchi <- sapply(mols, get.inchi)
+    }
   
   isNAtmp          <- is.na(inchiKeyToInchi) | inchiKeyToInchi == ""
   inchiKeyToInchi  <- inchiKeyToInchi[!isNAtmp]
