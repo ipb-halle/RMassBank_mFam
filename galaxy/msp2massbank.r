@@ -3228,6 +3228,7 @@ validateRecords <- function(folder){
   cat(paste("\nValidating", length(files), "records in folder", folder, "\n"))
   results <- lapply(X = files, FUN = function(file){
     cmd <- paste("/bin/bash /usr/src/MassBank-web/MassBank-Project/MassBank-lib/target/MassBank-lib/MassBank-lib/bin/Validator ", gsub(x = file, pattern = " ", replacement = "\\\\ "), "", sep = "")
+    cmd <- "/bin/true" ## Disable validator here, shall be done externally / separately
     out <- suppressWarnings(expr = {
       system(command = cmd, intern = FALSE)
     })
