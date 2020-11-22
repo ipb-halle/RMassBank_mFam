@@ -29,7 +29,7 @@ RUN R -e 'library(devtools); devtools::install_github("https://github.com/MassBa
 RUN R -e 'library(devtools); install_github(repo = "CDK-R/rinchi@master")'
 
 # Install old version of webchem
-RUN R -e 'devtools::install_github("ropensci/webchem", ref="8c9324225d161158bf12e26f688a331201ec9647")'
+RUN R -e 'devtools::install_github("ropensci/webchem")'
 
 # Install RMassBank
 WORKDIR /usr/src
@@ -37,10 +37,10 @@ RUN git clone https://github.com/MassBank/RMassBank ; cd RMassBank ; git checkou
 #RUN git clone https://github.com/MassBank/RMassBank
 
 # Install MassBank
-WORKDIR /usr/src
-RUN git clone https://github.com/MassBank/MassBank-web
-WORKDIR /usr/src/MassBank-web/MassBank-Project/
-RUN mvn package
+#WORKDIR /usr/src
+#RUN git clone https://github.com/MassBank/MassBank-web
+#WORKDIR /usr/src/MassBank-web/MassBank-Project/
+#RUN mvn package
 
 # Cleanup
 RUN apt-get -y --purge --auto-remove remove make gcc gfortran g++
